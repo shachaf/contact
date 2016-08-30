@@ -1,0 +1,220 @@
+/* Game */
+
+/* html, body, .game { width: 100%; height: 100%; } */
+
+html, body { margin: 0; padding: 0; }
+
+.game {
+}
+
+.game .gameBody {
+}
+
+/* */
+
+.game {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  flex: 0;
+  border-bottom: 1px solid black;
+  padding-bottom: 4px;
+}
+
+.headerContents {
+}
+
+.gameBody {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  overflow: hidden;
+  margin: 5px;
+}
+
+.clues {
+  flex-grow: 0;
+  width: 30em;
+  height: 100%;
+  overflow: auto;
+}
+
+.chat {
+  flex-grow: 1;
+  /* overflow: auto; */
+  margin-left: 5px;
+  max-width: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.chat>.messages {
+  flex-grow: 1;
+  height: 100%;
+  overflow: auto;
+}
+
+.chatForm {
+  margin: 5px;
+}
+
+/* Header */
+
+.header {
+  margin: 5px;
+}
+
+.header>.headerContents {
+}
+
+.header>h1 {
+}
+
+.header .prefix {
+  color: red;
+}
+
+.header .suffix {
+  color: #555;
+}
+
+.revealButton {
+  margin-left: 5px;
+}
+
+.notForm {
+  display: inline;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.notForm button {
+  margin-left: 3px;
+}
+
+.userList span {
+  font-family: monospace;
+}
+
+/* Clues */
+
+.clues {
+  /* border-right: 1px solid black; */
+  border: 1px solid black;
+}
+
+.clues>ul {
+  padding-left: 0;
+  /* width: 95%; /* ? */
+}
+
+.clues>ul>li {
+  list-style-type: none;
+  border: 1px solid black;
+  border-radius: 2px;
+  padding: 5px;
+  margin: 3px;
+  /* width: 100%; */
+}
+
+.clueForm input {
+  margin-bottom: 3px;
+}
+
+li.clueActive {
+  background-color: #f88;
+}
+
+li.clueInactive {
+  background-color: gray;
+}
+
+.challengeButton {
+  margin: 3px;
+}
+
+.clueId {
+  float: right;
+  border: 1px solid black;
+  border-radius: 2px;
+  padding: 5px;
+  margin: 2px;
+}
+
+ul.guesses {
+  clear: right;
+}
+
+ul.guesses>li {
+  border: 1px solid black;
+  border-radius: 2px;
+  padding: 3px;
+  list-style-type: none;
+  margin-bottom: 3px;
+}
+
+.guess {
+}
+
+.guess-active {
+  background-color: #f88;
+}
+
+.guess-withdrawn {
+  background-color: #aaa;
+}
+
+.guess-defused {
+  background-color: #aaa;
+}
+
+.guess-challenged {
+  background-color: #884;
+}
+
+.guessTimer {
+  float: right;
+}
+
+.guess .withdrawButton {
+  margin-left: 5px;
+}
+
+.contactForm button {
+  margin-left: 3px;
+}
+
+/* Chat */
+
+.chat>.messages>ul>li {
+  font-family: monospace;
+  white-space: pre-wrap;
+  list-style-type: none;
+}
+
+.chat footer {
+}
+
+.chatForm {
+  flex: 0;
+  /* position: absolute;
+  bottom: 2px; */
+  display: flex;
+}
+
+.chatForm>.chatUsername {
+  font-family: monospace;
+  margin-right: 5px;
+}
+
+.chatForm>input {
+  flex: 1;
+}
+
+.chatForm>button {
+}

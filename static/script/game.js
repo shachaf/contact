@@ -1,0 +1,1 @@
+../../build-client/game.js

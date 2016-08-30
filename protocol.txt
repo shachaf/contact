@@ -1,0 +1,35 @@
+T?: T | undefined
+Timestamp: Number // UTC, ms since 1970
+Id: Number // Integer IDs (not globally unique)
+Username: String // /[a-z0-9]+/
+Word: String /[a-z]+/
+Clue: {id: Id, ts: Timestamp, active: Boolean, question: String, guesses: [Guess]}
+Guess: {ts: Timestamp, status: GuessStatus, username: Username, word: String?} // Deleted id -- necessary?
+GuessStatus: "active" | "withdrawn" | "defused" | "challenged" // withdrawn-then-defused -> defused
+UserData: {username: Username, wordmaster: Boolean}
+Message: {id: Id, ts: Timestamp, username: Username, text: String}
+Game:
+{ clues: [Clue],
+  users: [UserData],
+  you: UserData,
+  active: Boolean,
+  gameId: Id,
+  word: {prefix: Word, fullWord: Word?, not: {Word}}
+}
+Request:
+  {type: "snapshot"}
+| {type: "say", text: String}
+| {type: "reveal"} // wordmaster only
+| {type: "not", word: Word}
+| {type: "clue", question: String, guess: Word}
+| {type: "contact", clueId: Id, word: Word}
+| {type: "withdraw", clueId: Id}
+| {type: "challenge", clueId: Id}
+| {type: "begin", word: Word}
+| {type: "wordmaster"} // Become wordmaster
+Response: // Every response includes ts: Timestamp
+  {type: "error", error: String} // todo: maybe add refresh: Boolean?
+| {type: "snapshot", snapshot: Snapshot} // Full snapshot.
+| {type: "game", game: Game} // Just the game state.
+| {type: "message", message: Message} // A single message.
+Snapshot: {messages: [Message], game: Game}
