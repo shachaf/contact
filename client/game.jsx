@@ -288,7 +288,7 @@ class Clue extends React.Component {
 
     return (
       <li className={"clue " + (clue.active ? "clueActive" : "clueInactive")}>
-        <span className="clueQuestion">{clue.question}</span>
+        <span className="clueClue">{clue.clue}</span>
         <span className="clueId">{clue.id}</span>
         {showChallenge
           ? <ChallengeButton clueId={clue.id} disabled={challengeDisabled} />
@@ -306,38 +306,37 @@ class Clue extends React.Component {
   }
 }
 
-// TODO: s/Question/Clue/ s/Clue/Guess/
 class ClueForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChangeQuestion = this.handleChangeQuestion.bind(this);
     this.handleChangeClue = this.handleChangeClue.bind(this);
-    this.state = {question: "", clue: ""};
+    this.handleChangeGuess = this.handleChangeGuess.bind(this);
+    this.state = {clue: "", guess: ""};
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    $handler.handleClue(this.state.question, this.state.clue);
-    this.setState({question: "", clue: ""});
+    $handler.handleClue(this.state.clue, this.state.guess);
+    this.setState({clue: "", guess: ""});
   }
 
-  handleChangeQuestion(e) {
-    this.setState({question: e.target.value});
+  handleChangeClue(e) {
+    this.setState({clue: e.target.value});
   }
 
-  handleChangeClue(newValue) {
-    this.setState({clue: newValue});
+  handleChangeGuess(newValue) {
+    this.setState({guess: newValue});
   }
 
   submitDisabled() {
-    const clue = this.state.clue;
+    const guess = this.state.guess;
     const prefix = this.props.prefix;
-    const valid = clue.match(/^[a-z]+$/);
-    const question = this.state.question;
+    const valid = guess.match(/^[a-z]+$/);
+    const clue = this.state.clue;
 
-    return !(valid && clue.startsWith(prefix) && clue.length > prefix.length
-        && question !== "");
+    return !(valid && guess.startsWith(prefix) && guess.length > prefix.length
+        && clue !== "");
   }
 
   render() {
@@ -345,8 +344,8 @@ class ClueForm extends React.Component {
     return (
       <li>
         <form className="clueForm" onSubmit={this.handleSubmit}>
-          <div><label>Question: <input type="text" value={this.state.question} onChange={this.handleChangeQuestion}/></label></div>
-          <div><label>Clue: <PrefixedInput prefix={prefix} value={this.state.clue} onChange={this.handleChangeClue} /></label></div>
+          <div><label>Clue: <input type="text" value={this.state.clue} onChange={this.handleChangeClue}/></label></div>
+          <div><label>Guess: <PrefixedInput prefix={prefix} value={this.state.guesclues} onChange={this.handleChangeGuess} /></label></div>
           <div><button type="submit" disabled={this.submitDisabled()}>Clue</button></div>
         </form>
       </li>
@@ -550,7 +549,7 @@ class Game extends React.Component {
 //  //clues: [
 //  //  { id: 0,
 //  //    ts: 1460263713000,
-//  //    question: "Does it remove a horse from its stable?",
+//  //    clue: "Does it remove a horse from its stable?",
 //  //    guesses: [ // Should be sorted by id
 //  //        {id: 0, from: "someone", ts: 1460263773000},
 //  //        {id: 1, from: "shachaf", ts: 1460263778000, word: "destabilize"},
@@ -558,7 +557,7 @@ class Game extends React.Component {
 //  //  },
 //  //  { id: 1,
 //  //    ts: 1460263800000,
-//  //    question: "Is it what this is?",
+//  //    clue: "Is it what this is?",
 //  //    guesses: [ {id: 0, user: "someone", ts: 1460263830000} ],
 //  //  },
 //  //],
@@ -601,7 +600,7 @@ class Handler {
       case "clue":
         m = arg.match(/^([a-z]+) (.+)$/);
         if (!m) {
-          console.log("usage: /clue word question");
+          console.log("usage: /clue guess clue");
           break;
         }
         this.handleClue(m[2], m[1]);
@@ -675,8 +674,8 @@ class Handler {
     this.sendReq({type: "not", word: word});
   }
 
-  handleClue(question, guess) {
-    this.sendReq({type: "clue", question: question, guess: guess});
+  handleClue(clue, guess) {
+    this.sendReq({type: "clue", clue: clue, guess: guess});
   }
 
   handleContact(clueId, word) {

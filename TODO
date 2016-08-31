@@ -2,3 +2,4 @@
 17:25 <shachaf> don't display contact input when game is over (or just deactivate all clues when game ends?)
 17:49 <shachaf> reset clue ids when starting new game
 handle challenge
+choosewm

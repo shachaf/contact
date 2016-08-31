@@ -20,24 +20,14 @@ export class Guess {
     }
     return obj;
   }
-
-  //censored(user, game, gameId) {
-  //  let obj = {ts: this.ts, active: this.active, username: this.username};
-  //  if (user.username === this.username ||
-  //      game.isGameIdOver(gameId) ||
-  //      game.safeToReveal(this.word)) {
-  //    obj.word = this.word;
-  //  }
-  //  return obj;
-  //}
 }
 
 export class Clue {
-  constructor(id, question) {
+  constructor(id, clue) {
     this.id = id;
     this.ts = Date.now();
     this.active = true;
-    this.question = question;
+    this.clue = clue;
     this.guesses = [];
   }
 
@@ -128,44 +118,9 @@ export class Clue {
       id: this.id,
       ts: this.ts,
       active: this.isActive(),
-      question: this.question,
+      clue: this.clue,
       guesses: this.guesses.map(g => g.serialize(game, user)),
     };
   }
 
-  //censored(user, game) {
-  //  let obj = {id: this.id, gameId: this.gameId, ts: this.ts,
-  //    active: this.active, question: this.question,
-  //    guesses: this.guesses.map(g => g.censored(user, game, this.gameId))};
-  //}
 }
-
-/*
-  // Return a censored copy of an event.
-  // After a game ends, everyone will be able to see all events. But the way
-  // this is written, they'll only see them if they get a new snapshot.
-  censoredEvent(user, evt) {
-    let copy = util.deepcopy(evt);
-    if (evt.gameId === this.gameId) return copy;
-    switch (evt.type) {
-      case "chat": case "quit": case "not": case "reveal":
-        break;
-      case "contact":
-        for (guess of copy.guesses) {
-          if (guess.from !== user.username) {
-            delete guess.word;
-          }
-        }
-        break;
-      case "begin":
-        if (!user.wordmaster) {
-          delete evt.word;
-        }
-        break;
-      default:
-        throw "invalid event " + JSON.stringify(evt);
-        break;
-    }
-    return copy;
-  }
-*/

@@ -21,7 +21,7 @@ Request:
 | {type: "say", text: String}
 | {type: "reveal"} // wordmaster only
 | {type: "not", word: Word}
-| {type: "clue", question: String, guess: Word}
+| {type: "clue", clue: String, guess: Word}
 | {type: "contact", clueId: Id, word: Word}
 | {type: "withdraw", clueId: Id}
 | {type: "challenge", clueId: Id}

@@ -1,5 +1,4 @@
 import {User} from "./User";
-//import * as Event from "./Event";
 import * as util from "./util";
 
 export class Game {
@@ -102,10 +101,6 @@ export class Game {
   currentPrefix() {
     return this.fullWord.slice(0, this.knownChars);
   }
-
-  //safeToReveal(word) {
-  //  return word in notWords || !word.startsWith(currentPrefix);
-  //}
 
   // Move some of this logic to User.
   wsOnConnected(ws, username) {

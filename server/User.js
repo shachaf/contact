@@ -1,5 +1,4 @@
 import * as util from "./util";
-//import * as Event from "./Event";
 import * as Clue from "./Clue";
 
 // TODO: Move a lot of the logic back into Game.
@@ -91,15 +90,6 @@ export class User {
 
   sendSnapshot() {
     let game = this.game;
-    //let snapshot = {
-    //  ts: Date.now(),
-    //  events: game.events.map(e => e.censored(this, game)),
-    //  clues: [], //this.game.clues.map(c => c.censored(this, game)),
-    //  users: Array.from(game.users.values()).map(u => u.censored()),
-    //  you: this.censored(),
-    //  game: game.censoredGameState(this),
-    //};
-
     let snapshot = {
       messages: game.serializeMessages(),
       game: game.serializeGame(this),
@@ -189,9 +179,9 @@ export class User {
       this.warn("wordmaster can't clue");
       return false;
     }
-    const question = req.question;
-    if (!question) {
-      this.warn("invalid question");
+    const clueStr = req.clue;
+    if (!clueStr) {
+      this.warn("invalid clue");
       return false;
     }
     const guessWord = req.guess;
@@ -209,12 +199,12 @@ export class User {
     }
 
     let clueId = this.game.nextClueId++;
-    let clue = new Clue.Clue(clueId, question);
+    let clue = new Clue.Clue(clueId, clueStr);
     clue.addGuess(new Clue.Guess(this.username, guessWord));
 
     this.game.clues.set(clueId, clue);
 
-    this.game.sendMessage(this.username + " added clue " + clueId + ": " + question);
+    this.game.sendMessage(this.username + " added clue " + clueId + ": " + clueStr);
 
     return true;
   }
@@ -254,7 +244,7 @@ export class User {
     }
 
     clue.addGuess(new Clue.Guess(this.username, guessWord));
-    this.game.sendMessage(this.username + " contacted clue " + clue.id + ": " + clue.question);
+    this.game.sendMessage(this.username + " contacted clue " + clue.id + ": " + clue.clue);
 
     return true;
   }
@@ -304,7 +294,7 @@ export class User {
       return false;
     }
 
-    this.game.sendMessage(this.username + " challenged clue " + clue.id + ": " + clue.question);
+    this.game.sendMessage(this.username + " challenged clue " + clue.id + ": " + clue.clue);
 
     let clueSuccessful = clue.challenge();
 
