@@ -3,3 +3,6 @@
 17:49 <shachaf> reset clue ids when starting new game
 handle challenge
 choosewm
+guess text field doesn't clear when adding clue
+  actually, guess text field is completely broken
+autoscroll sometimes broken

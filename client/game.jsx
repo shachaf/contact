@@ -345,7 +345,7 @@ class ClueForm extends React.Component {
       <li>
         <form className="clueForm" onSubmit={this.handleSubmit}>
           <div><label>Clue: <input type="text" value={this.state.clue} onChange={this.handleChangeClue}/></label></div>
-          <div><label>Guess: <PrefixedInput prefix={prefix} value={this.state.guesclues} onChange={this.handleChangeGuess} /></label></div>
+          <div><label>Guess: <PrefixedInput prefix={prefix} value={this.state.guess} onChange={this.handleChangeGuess} /></label></div>
           <div><button type="submit" disabled={this.submitDisabled()}>Clue</button></div>
         </form>
       </li>
