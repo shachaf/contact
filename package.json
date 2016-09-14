@@ -4,6 +4,7 @@
   "scripts": {
     "watchbab-server": "node_modules/.bin/babel -w -d build-server/ server/",
     "watchbab-client": "node_modules/.bin/babel -w -d build-client/ client/",
+    "build": "node_modules/.bin/babel -d build-server/ server/ && node_modules/.bin/babel -d build-client/ client/",
     "start": "node_modules/.bin/nodemon --harmony -w static/script/bundle.js -w build-server/ build-server/main.js"
   },
   "dependencies": {

@@ -30,6 +30,7 @@ export class User {
       "challenge": this.handleChallengeReq,
       "begin": this.handleBeginReq,
       "wordmaster": this.handleWordmasterReq,
+      "choosewm": this.handleChoosewmReq,
     };
 
     let handler = handlers[req.type];
@@ -344,6 +345,17 @@ export class User {
     this.game.sendMessage(this.username + " is now a wordmaster");
 
     return true;
+  }
+
+  handleChoosewmReq(req) {
+    if (this.game.gameActive) {
+      this.warn("game is in progress");
+      return false;
+    }
+    let users = Array.from(this.game.users.values());
+    let chosenUser = users[Math.floor(Math.random() * users.length)];
+    this.game.sendMessage(this.username + " rolled a die and it landed on: " + chosenUser.username);
+    return false;
   }
 
   // end requests

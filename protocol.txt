@@ -27,6 +27,7 @@ Request:
 | {type: "challenge", clueId: Id}
 | {type: "begin", word: Word}
 | {type: "wordmaster"} // Become wordmaster
+| {type: "choosewm"}
 Response: // Every response includes ts: Timestamp
   {type: "error", error: String} // todo: maybe add refresh: Boolean?
 | {type: "snapshot", snapshot: Snapshot} // Full snapshot.

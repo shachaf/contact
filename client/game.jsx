@@ -114,6 +114,7 @@ class BeginInput extends React.Component {
     super(props);
     this.handleBegin = this.handleBegin.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleChoosewm = this.handleChoosewm.bind(this);
 
     this.state = {value: ""};
   }
@@ -130,6 +131,11 @@ class BeginInput extends React.Component {
     $handler.handleBegin(this.refs.input.value);
   }
 
+  handleChoosewm(e) {
+    e.preventDefault();
+    $handler.handleChoosewm();
+  }
+
   beginDisabled() {
     return !this.state.value.match(/^[a-z]+$/);
   }
@@ -139,6 +145,7 @@ class BeginInput extends React.Component {
       <form>
         <input type="text" ref="input" value={this.state.value} onChange={this.handleChange} />{" "}
         <button onClick={this.handleBegin} disabled={this.beginDisabled()}>Begin game</button>
+        <button onClick={this.handleChoosewm}>Choose WM</button>
       </form>
     );
   }
@@ -396,14 +403,16 @@ function showTimestamp(ts) {
 class ChatMessage extends React.Component {
   render() {
     const msg = this.props.message;
-    let msgText;
+    let msgText, className;
     if (msg.username) {
       msgText = "[" + showTimestamp(msg.ts) + "] <" + msg.username + "> " + msg.text;
+      className = "userMessage";
     } else {
       msgText = "[" + showTimestamp(msg.ts) + "] " + msg.text;
+      className = "systemMessage";
     }
     return (
-      <li>{msgText}</li>
+      <li className={className}>{msgText}</li>
     );
   }
 }
@@ -415,7 +424,7 @@ class ChatMessages extends React.Component {
 
   componentWillUpdate() {
     const node = this.refs.div;
-    this.scrollToBottom = node.scrollHeight - node.offsetHeight - node.scrollTop < 1;
+    this.scrollToBottom = node.scrollHeight - node.offsetHeight - node.scrollTop < 10;
   }
 
   componentDidUpdate() {
@@ -643,6 +652,9 @@ class Handler {
       case "wordmaster": case "wm":
         this.handleWordmaster();
         break;
+      case "choosewm":
+        this.handleChoosewm();
+        break;
       case "begin":
         m = arg.match(/^[a-z]+$/);
         if (!m) {
@@ -696,6 +708,10 @@ class Handler {
 
   handleWordmaster() {
     this.sendReq({type: "wordmaster"});
+  }
+
+  handleChoosewm() {
+    this.sendReq({type: "choosewm"});
   }
 
   handleChatInput(text) {

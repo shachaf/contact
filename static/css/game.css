@@ -197,6 +197,13 @@ ul.guesses>li {
   list-style-type: none;
 }
 
+.userMessage {
+}
+
+.systemMessage {
+  color: #884400;
+}
+
 .chat footer {
 }
 
