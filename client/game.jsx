@@ -95,7 +95,7 @@ class NotForm extends React.Component {
     const prefix = this.props.prefix;
     const valid = value.match(/^[a-z]+$/);
 
-    return !(valid && value.startsWith(prefix) && value.length > prefix.length);
+    return !valid || !value.startsWith(prefix);
   }
 
   render() {
@@ -235,7 +235,7 @@ class ClueContact extends React.Component {
     const prefix = this.props.prefix;
     const valid = value.match(/^[a-z]+$/);
 
-    return !(valid && value.startsWith(prefix) && value.length > prefix.length);
+    return !valid || !value.startsWith(prefix);
   }
 
   render() {
@@ -339,11 +339,10 @@ class ClueForm extends React.Component {
   submitDisabled() {
     const guess = this.state.guess;
     const prefix = this.props.prefix;
-    const valid = guess.match(/^[a-z]+$/);
+    const guessValid = guess.match(/^[a-z]+$/);
     const clue = this.state.clue;
 
-    return !(valid && guess.startsWith(prefix) && guess.length > prefix.length
-        && clue !== "");
+    return !guessValid || !guess.startsWith(prefix) || clue === "";
   }
 
   render() {
