@@ -354,7 +354,7 @@ export class User {
     }
     let users = Array.from(this.game.users.values());
     let chosenUser = users[Math.floor(Math.random() * users.length)];
-    this.game.sendMessage(this.username + " rolled a die and it landed on: " + chosenUser.username);
+    this.game.sendMessage(this.username + " chose a random user: " + chosenUser.username);
     return false;
   }
 
