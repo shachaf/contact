@@ -1,1 +1,1 @@
-../../build-client/game.js
+../../build/client/game.js

@@ -2,10 +2,9 @@
   "name": "Contact",
   "version": "0.0.0",
   "scripts": {
-    "watchbab-server": "node_modules/.bin/babel -w -d build-server/ server/",
-    "watchbab-client": "node_modules/.bin/babel -w -d build-client/ client/",
-    "build": "node_modules/.bin/babel -d build-server/ server/ && node_modules/.bin/babel -d build-client/ client/",
-    "start": "node_modules/.bin/nodemon --harmony -w static/script/bundle.js -w build-server/ build-server/main.js"
+    "watch": "node_modules/.bin/babel -w -d build/ src/",
+    "build": "node_modules/.bin/babel -d build/ src/",
+    "start": "node_modules/.bin/nodemon --harmony -w static/script/bundle.js -w build/server/ build/server/main.js"
   },
   "dependencies": {
     "babel-preset-es2015": "^6.14.0",

@@ -1,1 +1,1 @@
-../../build-client/index.js
+../../build/client/index.js

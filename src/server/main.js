@@ -15,10 +15,10 @@ let express = require("express");
 let app = express();
 let ws = new require("ws");
 let server = require("http").createServer(app);
-app.use("/", express.static(__dirname + "/../static"));
+app.use("/", express.static(__dirname + "/../../static"));
 
 app.get("/game/:gamename", function (req, res) {
-  res.sendFile(path.resolve(__dirname + "/../static/game.html"));
+  res.sendFile(path.resolve(__dirname + "/../../static/game.html"));
 });
 
 let $games = new Map();
