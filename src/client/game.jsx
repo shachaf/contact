@@ -309,7 +309,6 @@ class ClueForm extends React.Component {
 
   handleChangeGuess(e) {
     const newValue = e.target.value;
-    console.log(newValue);
     this.setState({guess: newValue});
   }
 
@@ -380,12 +379,15 @@ class ChatMessage extends React.Component {
   render() {
     const msg = this.props.message;
     let msgText, className;
-    if (msg.username) {
-      msgText = "[" + showTimestamp(msg.ts) + "] <" + msg.username + "> " + msg.text;
-      className = "userMessage";
-    } else {
+    if (!msg.username) {
       msgText = "[" + showTimestamp(msg.ts) + "] " + msg.text;
       className = "systemMessage";
+    } else if (msg.username === "<ERROR>") {
+      msgText = msg.text;
+      className = "errorMessage";
+    } else {
+      msgText = "[" + showTimestamp(msg.ts) + "] <" + msg.username + "> " + msg.text;
+      className = "userMessage";
     }
     return (
       <li className={className}>{msgText}</li>
@@ -400,7 +402,7 @@ class ChatMessages extends React.Component {
 
   componentWillUpdate() {
     const node = this.refs.div;
-    this.scrollToBottom = node.scrollHeight - node.offsetHeight - node.scrollTop < 10;
+    this.scrollToBottom = node.scrollHeight - node.offsetHeight - node.scrollTop < 100;
   }
 
   componentDidUpdate() {
@@ -585,7 +587,7 @@ class Handler {
       case "clue":
         m = arg.match(/^([a-z]+) (.+)$/);
         if (!m) {
-          console.log("usage: /clue guess clue");
+          this.showError("usage: /clue guess clue");
           break;
         }
         this.handleClue(m[2], m[1]);
@@ -596,7 +598,7 @@ class Handler {
       case "not":
         m = arg.match(/^([a-z]+)/);
         if (!m) {
-          console.log("usage: /not word");
+          this.showError("usage: /not word");
           break;
         }
         this.handleNot(m[1]);
@@ -604,7 +606,7 @@ class Handler {
       case "contact":
         m = arg.match(/^(\d+) ([a-z]+)$/);
         if (!m) {
-          console.log("usage: /contact clueid word");
+          this.showError("usage: /contact clueid word");
           break;
         }
         this.handleContact(parseInt(m[1]), m[2]);
@@ -612,7 +614,7 @@ class Handler {
       case "withdraw": case "wd":
         m = arg.match(/^(\d+)$/);
         if (!m) {
-          console.log("usage: /withdraw clueid");
+          this.showError("usage: /withdraw clueid");
           break;
         }
         this.handleWithdraw(parseInt(m[1]));
@@ -620,7 +622,7 @@ class Handler {
       case "challenge":
         m = arg.match(/^(\d+)$/);
         if (!m) {
-          console.log("usage: /challenge clueid");
+          this.showError("usage: /challenge clueid");
           break;
         }
         this.handleChallenge(parseInt(m[1]));
@@ -634,13 +636,13 @@ class Handler {
       case "begin":
         m = arg.match(/^[a-z]+$/);
         if (!m) {
-          console.log("invalid word");
+          this.showError("invalid word");
           break;
         }
         this.handleBegin(arg);
         break;
       default:
-        console.log("invalid command: " + cmd);
+        this.showError("invalid command: " + cmd);
         return null;
         break;
     }
@@ -703,12 +705,24 @@ class Handler {
     this.ws.send(JSON.stringify(req));
   }
 
+  showError(s) {
+    console.log("error: " + s);
+    // Hack: Write a non-persistent error message to the log. Better than nothing.
+    let msg = {
+      "id": "e" + this.snapshot.messages.length, // Double hack to get a unique ID.
+      //"ts": Date.now(),
+      "username": "<ERROR>", // Triple hack.
+      "text": s,
+    };
+    this.snapshot.messages.push(msg);
+  }
+
   wsGotData(e) {
     console.log("got " + e.data);
     let res = JSON.parse(e.data);
     switch (res.type) {
       case "error":
-        console.log("error: " + res.error);
+        this.showError(res.error);
         break;
       case "snapshot":
         this.snapshot = res.snapshot;
@@ -738,7 +752,7 @@ class Handler {
   }
 
   wsClosed(e) {
-    console.log("ws was closed");
+    this.showError("ws was closed");
   }
 
   start() {

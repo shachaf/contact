@@ -204,6 +204,10 @@ ul.guesses>li {
   color: #884400;
 }
 
+.errorMessage {
+  color: #ff0000;
+}
+
 .chat footer {
 }
 
