@@ -77,14 +77,15 @@ export class Clue {
   challenge() {
     let activeGuesses = this.guessesWithStatus("active");
     let clueSuccessful = false;
+    let consensusGuess = null;
     for (let guess of activeGuesses) {
       let numGuessesMatchingWord = activeGuesses.filter(g => g.word === guess.word).length;
       if (numGuessesMatchingWord * 2 > activeGuesses.length) {
-        clueSuccessful = true;
+        consensusGuess = guess.word;
       }
       guess.status = "challenged";
     }
-    return clueSuccessful;
+    return [consensusGuess, activeGuesses];
   }
 
   guessesWithStatus(status) {

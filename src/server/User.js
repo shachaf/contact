@@ -114,7 +114,7 @@ export class User {
     }
 
     // TODO: Reorder these?
-    this.game.doReveal(this.username);
+    this.game.doReveal(false);
     this.game.sendMessage(this.username + " revealed a letter; prefix: " + this.game.currentPrefix());
     return true;
   }
@@ -297,16 +297,18 @@ export class User {
 
     this.game.sendMessage(this.username + " challenged clue " + clue.id + ": " + clue.clue);
 
-    let clueSuccessful = clue.challenge();
+    let [consensusGuess, activeGuesses] = clue.challenge();
+    let guessesMsg = activeGuesses.map(g => g.username + ": " + g.word).sort().join(", ");
 
-    if (clueSuccessful) {
-      this.game.sendMessage("clue successful!");
-      this.game.doReveal();
-      // TODO: End game if challenged guess was correct.
+    if (consensusGuess !== null) {
+      this.game.sendMessage("Clue " + clue.id + " successful! Guesses: " + guessesMsg);
+      console.log(consensusGuess, this.game.fullWord);
+      this.game.doReveal(consensusGuess === this.game.fullWord);
       // Maybe: For each guessed word, not it (unless correct)?
       // People could always ask "Is it X?" immediately anyway, now that everyone has the word in mind.
+      // That's probably a better way to handle the correct word, too, than a boolean argument to doReveal.
     } else {
-      this.game.sendMessage("clue failed");
+      this.game.sendMessage("Clue " + clue.id + " failed! Guesses: " + guessesMsg);
     }
 
     return true;

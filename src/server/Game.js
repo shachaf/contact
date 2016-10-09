@@ -80,8 +80,12 @@ export class Game {
     }
   }
 
-  doReveal() {
-    this.knownChars++;
+  doReveal(allChars) {
+    if (allChars) {
+      this.knownChars = this.fullWord.length
+    } else {
+      this.knownChars++;
+    }
     for (let clue of this.clues.values()) {
       clue.handlePrefixChange(this.currentPrefix());
     }
