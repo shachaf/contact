@@ -1,30 +1,3 @@
-// An <input type="text"> with a prefix. Also validates that input is a word.
-class PrefixedInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(e) {
-    const newValue = e.target.value;
-    const prefix = this.props.prefix;
-    const valid = newValue.match(/^[a-z]*$/);
-    const len = Math.min(newValue.length, prefix.length);
-
-    if (valid && newValue.slice(0, len) === prefix.slice(0, len)) {
-      this.props.onChange(newValue);
-    }
-  }
-
-  render() {
-    return (
-        <input value={this.props.value}
-               onChange={this.handleChange}
-               placeholder={this.props.prefix} />
-    );
-  }
-}
-
 class Header extends React.Component {
   handleReveal() {
     $handler.handleReveal();
@@ -80,7 +53,8 @@ class NotForm extends React.Component {
     this.state = {value: ""};
   }
 
-  handleChange(newValue) {
+  handleChange(e) {
+      const newValue = e.target.value;
       this.setState({value: newValue});
   }
 
@@ -102,7 +76,7 @@ class NotForm extends React.Component {
     const {prefix} = this.props;
     return (
       <form className="notForm" onSubmit={this.handleSubmit}>
-        <PrefixedInput value={this.state.value} onChange={this.handleChange} prefix={prefix} />
+        <input value={this.state.value} onChange={this.handleChange} placeholder={prefix} />
         <button type="submit" disabled={this.submitDisabled()}>Not</button>
       </form>
     );
@@ -220,7 +194,8 @@ class ClueContact extends React.Component {
     this.handleContact = this.handleContact.bind(this);
   }
 
-  handleChange(newValue) {
+  handleChange(e) {
+    const newValue = e.target.value;
     this.setState({value: newValue});
   }
 
@@ -243,7 +218,7 @@ class ClueContact extends React.Component {
     return (
       <li className="contact">
         <form className="contactForm" onSubmit={this.handleContact}>
-          <PrefixedInput prefix={prefix} value={this.state.value} onChange={this.handleChange} />
+          <input placeholder={prefix} value={this.state.value} onChange={this.handleChange} />
           <button type="submit" disabled={this.contactDisabled()}>
             Contact
           </button>
@@ -332,7 +307,9 @@ class ClueForm extends React.Component {
     this.setState({clue: e.target.value});
   }
 
-  handleChangeGuess(newValue) {
+  handleChangeGuess(e) {
+    const newValue = e.target.value;
+    console.log(newValue);
     this.setState({guess: newValue});
   }
 
@@ -351,7 +328,7 @@ class ClueForm extends React.Component {
       <li>
         <form className="clueForm" onSubmit={this.handleSubmit}>
           <div><label>Clue: <input type="text" value={this.state.clue} onChange={this.handleChangeClue}/></label></div>
-          <div><label>Guess: <PrefixedInput prefix={prefix} value={this.state.guess} onChange={this.handleChangeGuess} /></label></div>
+          <div><label>Guess: <input plcaeholder={prefix} value={this.state.guess} onChange={this.handleChangeGuess} /></label></div>
           <div><button type="submit" disabled={this.submitDisabled()}>Clue</button></div>
         </form>
       </li>
