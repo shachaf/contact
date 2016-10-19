@@ -1,0 +1,25 @@
+ul {
+  width: 20em;
+}
+
+li {
+  list-style-type: none;
+}
+
+li a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  font-size: 20pt;
+  padding: 5px;
+  background-color: #eee;
+}
+
+li a[href] {
+  background-color: #aaa;
+}
+
+li a[href]:hover {
+  background-color: #888;
+  border: 1px solid black;
+}

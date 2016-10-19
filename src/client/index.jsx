@@ -4,12 +4,11 @@ class GameListEntry extends React.Component {
     let sortedUsers = users.slice();
     sortedUsers.sort();
 
+    let href = active ? "/game/" + name : null;
+
     return (
       <li>
-        { active
-          ? <a href={"/game/" + name}>{name}</a>
-          : <span>{name}</span> }
-        : {sortedUsers.join(", ")}
+        <a href={href}>{name} [{sortedUsers.join(", ")}]</a>
       </li>
     );
   }
@@ -41,17 +40,21 @@ class GameList extends React.Component {
     let gameNames = Object.keys(this.props.gameUsers);
     gameNames.sort();
 
+    const active = username !== null;
+
     return (
       <div>
         <p>Your username is: <input ref="usernameInput" type="text" value={username || ""} onChange={this.handleChange} /></p>
         <div>
-          Games in progress: <button onClick={this.handleRefresh}>Refresh</button>
+          Games in progress
+          {active ? "" : " (choose a username to join)"}
+          : <button onClick={this.handleRefresh}>Refresh</button>
           <ul>
             {gameNames.map(name =>
               <GameListEntry
                 key={name} name={name}
                 users={gameUsers[name]}
-                active={username !== null} />
+                active={active} />
             )}
           </ul>
         </div>
