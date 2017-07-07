@@ -6,3 +6,6 @@ choosewm
 autoscroll sometimes broken
 <rbraun> shachaf: *please* add dumping the log of successful clues to the text field <rbraun> as is already done with defused clues
 clue stays active if it matches word when game ends
+bug: single-letter word makes it impossible for wordmaster to end game
+when a word is the result of a successful challenge, it should be added to the "not" list
+<gwillen> hmm, shachaf it lets me guess things that are already eliminated

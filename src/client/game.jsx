@@ -774,6 +774,19 @@ class Handler {
 
 var $handler;
 
+function askForUsername() {
+  while (true) {
+    let username = prompt("Enter username (all lowercase letters)");
+    if (username === null || username.match(/[a-z]+/)) {
+      return username;
+    }
+  }
+}
+
+function setUsername(username) {
+  document.cookie = "username=" + username + "; path=/";
+}
+
 function main() {
   let m = location.pathname.match(/^\/game\/([a-z]+)/);
   if (!m) {
@@ -784,12 +797,16 @@ function main() {
 
   const wsAddr = "ws://" + location.host + "/game/" + gameName;
   if (window.location.search) {
-    document.cookie = "username=" + window.location.search.slice(1) + "; path=/";
+    setUsername(window.location.search.slice(1));
   }
 
   if (!document.cookie.match(/\busername=[a-z]+\b/)) {
-    location.href = "/";
-    return;
+    let username = askForUsername();
+    if (username === null) {
+      location.href = "/";
+      return;
+    }
+    setUsername(username);
   }
 
   $handler = new Handler(wsAddr, document.getElementById("content"));
