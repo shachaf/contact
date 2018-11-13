@@ -370,7 +370,7 @@ class Clues extends React.Component {
 // Chat
 
 function showTimestamp(ts) {
-  function pad(n) { let s = '' + n; return s.length === 2 ? s : "0" + s; }
+  function pad(n) { let s = "" + n; return s.length === 2 ? s : "0" + s; }
   const date = new Date(ts);
   return pad(date.getHours()) + ":" + pad(date.getMinutes()) + ":" + pad(date.getSeconds());
 }
@@ -573,7 +573,7 @@ let initialSnapshot = {
 class Handler {
   rerender() {
     ReactDOM.render(<Game snapshot={this.snapshot} />, this.contentNode);
-    document.title = (this.showingNotification ? '*' : '') + 'Contact';
+    document.title = (this.showingUpdate ? "*" : "") + "Contact";
   }
 
   handleCmd(cmd, arg) {
@@ -641,6 +641,9 @@ class Handler {
           break;
         }
         this.handleBegin(arg);
+        break;
+      case "notifications":
+        Notification.requestPermission();
         break;
       default:
         this.showError("invalid command: " + cmd);
@@ -721,23 +724,22 @@ class Handler {
   wsGotData(e) {
     console.log("got " + e.data);
     let res = JSON.parse(e.data);
-    if (document.hidden) {
-      if (!this.showingNotification) {
-        // Maybe do real notifications if sully wants.
-      }
-      this.showingNotification = true;
-    }
+    let notificationText = "???";
     switch (res.type) {
       case "error":
+        notificationText = "error";
         this.showError(res.error);
         break;
       case "snapshot":
+        notificationText = "update";
         this.snapshot = res.snapshot;
         break;
       case "game":
+        notificationText = "game update";
         this.snapshot.game = res.game;
         break;
       case "message":
+        notificationText = "message" + (res.message.username ? " from " + res.message.username : "");
         this.snapshot.messages.push(res.message);
         //if (res.event.type === "chat") {
         //  let evt = res.event;
@@ -755,6 +757,13 @@ class Handler {
         console.log("invalid res: ", e.data);
         break;
     }
+    if (document.hidden) {
+      this.showingUpdate = true;
+      if (Notification.permission == "granted") {
+        let notif = new Notification("Contact: " + notificationText);
+        this.notifications.push(notif);
+      }
+    }
     this.rerender();
   }
 
@@ -767,9 +776,11 @@ class Handler {
     this.ws.onmessage = this.wsGotData.bind(this);
     this.ws.onclose = this.wsClosed.bind(this);
 
-    document.addEventListener('visibilitychange', () => {
+    //Notification.requestPermission(); // People can enable them manually if they feel like it.
+    document.addEventListener("visibilitychange", () => {
       if (!document.hidden) {
-        this.showingNotification = false;
+        this.showingUpdate = false;
+        for (let notif of this.notifications) { notif.close(); }
         this.rerender();
       }
     });
@@ -784,7 +795,8 @@ class Handler {
 
     this.snapshot = initialSnapshot;
 
-    this.showingNotification = false;
+    this.showingUpdate = false;
+    this.notifications = [];
   }
 }
 
