@@ -573,6 +573,7 @@ let initialSnapshot = {
 class Handler {
   rerender() {
     ReactDOM.render(<Game snapshot={this.snapshot} />, this.contentNode);
+    document.title = (this.showingNotification ? '*' : '') + 'Contact';
   }
 
   handleCmd(cmd, arg) {
@@ -720,6 +721,12 @@ class Handler {
   wsGotData(e) {
     console.log("got " + e.data);
     let res = JSON.parse(e.data);
+    if (document.hidden) {
+      if (!this.showingNotification) {
+        // Maybe do real notifications if sully wants.
+      }
+      this.showingNotification = true;
+    }
     switch (res.type) {
       case "error":
         this.showError(res.error);
@@ -760,6 +767,13 @@ class Handler {
     this.ws.onmessage = this.wsGotData.bind(this);
     this.ws.onclose = this.wsClosed.bind(this);
 
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        this.showingNotification = false;
+        this.rerender();
+      }
+    });
+
     this.rerender();
     setInterval(this.rerender.bind(this), 1000);
   }
@@ -769,6 +783,8 @@ class Handler {
     this.contentNode = contentNode;
 
     this.snapshot = initialSnapshot;
+
+    this.showingNotification = false;
   }
 }
 
@@ -777,7 +793,7 @@ var $handler;
 function askForUsername() {
   while (true) {
     let username = prompt("Enter username (all lowercase letters)");
-    if (username === null || username.match(/[a-z]+/)) {
+    if (username === null || username.match(/^[a-z]+$/)) {
       return username;
     }
   }

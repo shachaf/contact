@@ -9,3 +9,6 @@ clue stays active if it matches word when game ends
 bug: single-letter word makes it impossible for wordmaster to end game
 when a word is the result of a successful challenge, it should be added to the "not" list
 <gwillen> hmm, shachaf it lets me guess things that are already eliminated
+<sully> shachaf: feature request <sully> putting a * in the title when there is unseen activity
+layout gets all messed up when someone types a long line of text
+[21:56:29] <sully> I would love this site to do either notifications [21:56:40] <sully> or to set a * in the title when there is new shit
