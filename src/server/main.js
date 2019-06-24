@@ -50,8 +50,8 @@ app.get("/games", function(req, res) {
 });
 
 let wss = new ws.Server({server: server});
-wss.on("connection", function(ws) {
-  const path = ws.upgradeReq.url;
+wss.on("connection", function(ws, req) {
+  const path = req.url;
   const m = path.match(/^\/game\/([a-z]+)$/);
   if (m === null) {
     wsAbort(ws, "invalid path");
@@ -68,7 +68,7 @@ wss.on("connection", function(ws) {
 
   let username;
 
-  let cookieStr = ws.upgradeReq.headers.cookie;
+  let cookieStr = req.headers.cookie;
   if (cookieStr !== undefined) {
     username = cookie.parse(cookieStr)["username"];
   }
